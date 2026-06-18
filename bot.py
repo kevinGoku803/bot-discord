@@ -1,34 +1,45 @@
 import discord
 from discord.ext import commands
 import os
+import random
 
-# Configuración inicial del bot
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 @bot.event
 async def on_ready():
-    print(f'Sistema de Inteligencia Artificial Conectado: {bot.user}')
+    print(f'Sistema en línea: {bot.user}')
 
-# Este evento es el "cerebro" que responde a todo de forma natural
 @bot.event
 async def on_message(message):
-    # El bot no responde a sí mismo para evitar bucles
     if message.author == bot.user:
         return
 
-    # Si escribes 'hola', responde con personalidad
-    if message.content.lower().startswith("hola"):
-        await message.channel.send("¡Saludos, Comandante! Estoy aquí, procesando datos y a tu entera disposición. ¿Qué misión tienes para mí hoy?")
+    msg = message.content.lower()
+
+    # Respuestas directas y naturales
+    if "dos más dos" in msg:
+        await message.channel.send("Pues cuatro, ¿no? ¿O me estás poniendo a prueba?")
     
-    # Si escribes cualquier otra cosa larga, responde como IA
-    elif len(message.content) > 3:
-        await message.channel.send(f"Entendido, Comandante. Analizando: '{message.content}'. Mi lógica está procesando esta información para darte la mejor respuesta posible. ¿En qué más puedo asistirte?")
+    elif "hola" in msg or "qué tal" in msg:
+        await message.channel.send("¡Hola! Aquí estoy, ¿qué cuentas?")
+    
+    elif len(msg) > 3:
+        # Respuestas variadas que parecen una charla real
+        respuestas = [
+            "Eso suena bastante interesante, cuéntame más.",
+            "Ya veo, tiene sentido. ¿Qué más tienes pensado?",
+            "Vale, entiendo perfectamente.",
+            "Interesante punto de vista. ¿Qué sigue ahora?",
+            "La verdad es que sí, es una buena forma de verlo.",
+            "¿Ah sí? No lo había visto desde ese ángulo."
+        ]
+        await message.channel.send(random.choice(respuestas))
 
     await bot.process_commands(message)
 
-# Ejecución del sistema
 token = os.environ['DISCORD_TOKEN']
 bot.run(token)
+)
 
